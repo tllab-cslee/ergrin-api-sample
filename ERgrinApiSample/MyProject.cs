@@ -1,5 +1,4 @@
 ﻿using ERgrin.Api;
-using System.Windows.Forms;
 
 namespace ERgrinApiSample
 {
