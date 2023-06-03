@@ -42,8 +42,8 @@ namespace ERgrinApiSample
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string filePath = saveFileDialog1.FileName;
-                myProject.SaveFile(filePath);
+                textBox1.Text = saveFileDialog1.FileName;
+                myProject.SaveFile(textBox1.Text);
             }
         }
 
