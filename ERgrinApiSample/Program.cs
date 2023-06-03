@@ -1,4 +1,4 @@
-namespace WinFormsApp1
+namespace ERgrinApiSample
 {
     internal static class Program
     {

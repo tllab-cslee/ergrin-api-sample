@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WinFormsApp1
+namespace ERgrinApiSample
 {
     internal class Props
     {

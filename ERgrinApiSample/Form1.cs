@@ -1,7 +1,7 @@
 using ERgrin.Api;
 using System.Data;
 
-namespace WinFormsApp1
+namespace ERgrinApiSample
 {
     public partial class Form1 : Form
     {
@@ -19,7 +19,13 @@ namespace WinFormsApp1
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = openFileDialog1.FileName;
-                LoadFile(textBox1.Text);
+
+                Reset();
+
+                if (myProject.LoadFile(textBox1.Text))
+                {
+                    UpdateModels(myProject.Models);
+                }
             }
         }
 
@@ -28,7 +34,7 @@ namespace WinFormsApp1
             var res = MessageBox.Show("변경된 값을 기존 파일에 저장하시겠습니까?", "저장", MessageBoxButtons.OKCancel);
             if (res == DialogResult.OK)
             {
-                project?.Apply();
+                myProject.SaveFile();
             }
         }
 
@@ -37,25 +43,17 @@ namespace WinFormsApp1
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string filePath = saveFileDialog1.FileName;
-                project?.Apply(filePath);
+                myProject.SaveFile(filePath);
             }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var model = project?.Models?.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
+            var model = myProject.Models?.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
             if (model != null && model.ID != selectedModel?.ID)
             {
                 selectedModel = model;
-                if (model.Diagrams != null)
-                {
-                    comboBox2.Items.Clear();
-                    foreach (var diagram in model.Diagrams)
-                    {
-                        comboBox2.Items.Add(diagram.Name);
-                    }
-                    comboBox2.SelectedIndex = 0;
-                }
+                UpdateDiagrams(model.Diagrams);
             }
         }
 
@@ -65,20 +63,20 @@ namespace WinFormsApp1
             if (diagram != null && diagram.ID != selectedDiagram?.ID)
             {
                 selectedDiagram = diagram;
-                SetEntities(selectedModel!, diagram.Name!);
-                UpdateEntities();
+                myProject.SetEntities(selectedModel, diagram.Name);
+                UpdateEntities(myProject.Entities);
             }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var obj = (ListBox)sender;
-            Entity? entity = FindEntity((string)obj.SelectedItem!);
+            Entity? entity = myProject.FindEntity((string)obj.SelectedItem!);
             if (entity != null)
             {
                 selectedEntity = entity;
-                SetAttribute(entity);
-                UpdateAttributes();
+                myProject.SetAttribute(entity);
+                UpdateAttributes(myProject.Attributes);
 
                 selectedAttribute = null;
                 SetProps();
@@ -89,7 +87,7 @@ namespace WinFormsApp1
         {
 
             var obj = (ListBox)sender;
-            ERgrin.Api.Attribute? attribute = FindAttribute((string)obj.SelectedItem!);
+            ERgrin.Api.Attribute? attribute = myProject.FindAttribute((string)obj.SelectedItem!);
             if (attribute != null)
             {
                 selectedAttribute = attribute;
@@ -112,7 +110,7 @@ namespace WinFormsApp1
                         {
                             selectedEntity.LogicalName = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox1.SelectedIndex;
-                            UpdateEntities();
+                            UpdateEntities(myProject.Entities);
                             listBox1.SetSelected(idx, true);
                         }
                         break;
@@ -121,7 +119,7 @@ namespace WinFormsApp1
                         {
                             selectedEntity.PhysicalName = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox1.SelectedIndex;
-                            UpdateEntities();
+                            UpdateEntities(myProject.Entities);
                             listBox1.SetSelected(idx, true);
                         }
                         break;
@@ -130,7 +128,7 @@ namespace WinFormsApp1
                         {
                             selectedEntity.Description = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox1.SelectedIndex;
-                            UpdateEntities();
+                            UpdateEntities(myProject.Entities);
                             listBox1.SetSelected(idx, true);
                         }
                         break;
@@ -139,7 +137,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.LogicalName = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -148,7 +146,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.PhysicalName = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -157,7 +155,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.Description = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -166,7 +164,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.Nullable = item.Value?.Equals(true);
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -175,7 +173,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.DomainName = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -184,7 +182,7 @@ namespace WinFormsApp1
                         {
                             selectedAttribute.DataType = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
-                            UpdateAttributes();
+                            UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);
                         }
                         break;
@@ -196,116 +194,85 @@ namespace WinFormsApp1
         // Private Methods
         //--------------------------------------------------------------------------------
 
-        private void LoadFile(string filepath)
-        {
-            Reset();
-
-            project = Project.Create(filepath);
-
-            if (project.Models != null)
-            {
-                comboBox1.Items.Clear();
-                foreach (var model in project.Models)
-                {
-                    comboBox1.Items.Add(model.LogicalName);
-                }
-                comboBox1.SelectedIndex = 0;
-            }
-        }
-
         private void Reset()
         {
-            selectedEntity = null;
-            selectedAttribute = null;
             selectedModel = null;
             selectedDiagram = null;
-            entities = null;
-            attributes = null;
+            selectedEntity = null;
+            selectedAttribute = null;
 
-            SetProps();
-            UpdateAttributes();
-            UpdateEntities();
-        }
-
-        private void UpdateEntities()
-        {
+            comboBox1.Items.Clear();
+            comboBox2.Items.Clear();
             listBox1.Items.Clear();
-
-            if (entities != null)
-            {
-                foreach (var entity in entities)
-                {
-                    listBox1.Items.Add(entity.LogicalName!);
-                }
-            }
-        }
-
-        private void UpdateAttributes()
-        {
             listBox2.Items.Clear();
 
-            if (attributes != null)
+            SetProps();
+        }
+
+        private void UpdateModels(List<Model>? models)
+        {
+            if (models == null)
+                return;
+
+            comboBox1.Items.Clear();
+            foreach (var model in models)
             {
-                foreach (var attribute in attributes)
-                {
-                    listBox2.Items.Add(attribute.LogicalName!);
-                }
+                comboBox1.Items.Add(model.LogicalName);
+            }
+            comboBox1.SelectedIndex = 0;
+        }
+
+        private void UpdateDiagrams(List<Diagram>? diagrams)
+        {
+            if (diagrams == null)
+                return;
+
+            comboBox2.Items.Clear();
+            foreach (var diagram in diagrams)
+            {
+                comboBox2.Items.Add(diagram.Name);
+            }
+            comboBox2.SelectedIndex = 0;
+        }
+
+        private void UpdateEntities(List<Entity>? entities)
+        {
+            if (entities == null)
+                return;
+
+            listBox1.Items.Clear();
+            foreach (var entity in entities)
+            {
+                listBox1.Items.Add(entity.LogicalName!);
             }
         }
 
-        private void SetEntities(Model model, string diagramName)
+        private void UpdateAttributes(List<ERgrin.Api.Attribute>? attributes)
         {
-            entities = model.GetEntities(diagramName);
-        }
+            if (attributes == null)
+                return;
 
-        private Entity? FindEntity(string name)
-        {
-            return entities?.Where(x => x.LogicalName == name).FirstOrDefault();
-        }
-
-        private void SetAttribute(Entity entity)
-        {
-            attributes = entity.Attributes!;
-        }
-
-        private ERgrin.Api.Attribute? FindAttribute(string name)
-        {
-            return attributes?.Where(x => x.LogicalName == name).FirstOrDefault();
+            listBox2.Items.Clear();
+            foreach (var attribute in attributes)
+            {
+                listBox2.Items.Add(attribute.LogicalName!);
+            }
         }
 
         private void SetProps()
         {
-            var props = new Props();
-
-            props.EntityID = selectedEntity?.ID!.ToUpper();
-            props.EntityLogicalName = selectedEntity?.LogicalName;
-            props.EntityPhysicalName = selectedEntity?.PhysicalName;
-            props.EntityDescription = selectedEntity?.Description;
-
-            props.AttributeID = selectedAttribute?.ID!.ToUpper();
-            props.AttributeLogicalName = selectedAttribute?.LogicalName;
-            props.AttributePhysicalName = selectedAttribute?.PhysicalName;
-            props.AttributeDescription = selectedAttribute?.Description;
-            props.AttributeNullable = selectedAttribute?.Nullable;
-            props.AttributeDomainName = selectedAttribute?.DomainName;
-            props.AttributeDataType = selectedAttribute?.DataType;
-
-            propertyGrid1.SelectedObject = props;
+            propertyGrid1.SelectedObject = myProject.GetProps(selectedEntity, selectedAttribute);
         }
 
         //--------------------------------------------------------------------------------
         // Private Fields
         //--------------------------------------------------------------------------------
 
-        private Project? project;
-
         private Model? selectedModel;
         private Diagram? selectedDiagram;
-
-        private List<Entity>? entities;
-        private List<ERgrin.Api.Attribute>? attributes;
-
         private Entity? selectedEntity;
         private ERgrin.Api.Attribute? selectedAttribute;
+
+        private MyProject myProject = new();
     }
 }
