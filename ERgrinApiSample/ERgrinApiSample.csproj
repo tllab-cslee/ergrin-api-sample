@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="ERgrin.Api">
+      <HintPath>..\..\ergrin3\ERgrin.Api\bin\x64\Debug\net7.0\ERgrin.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="MessagePack">
+      <HintPath>..\..\ergrin3\ERgrin\bin\x64\Debug\net7.0-windows10.0.19041.0\MessagePack.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
