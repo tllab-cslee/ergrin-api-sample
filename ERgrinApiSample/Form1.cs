@@ -148,10 +148,15 @@ namespace WinFormsApp1
             props.EntityID = selectedEntity?.ID!.ToUpper();
             props.EntityLogicalName = selectedEntity?.LogicalName;
             props.EntityPhysicalName = selectedEntity?.PhysicalName;
+            props.EntityDescription = selectedEntity?.Description;
 
             props.AttributeID = selectedAttribute?.ID!.ToUpper();
             props.AttributeLogicalName = selectedAttribute?.LogicalName;
             props.AttributePhysicalName = selectedAttribute?.PhysicalName;
+            props.AttributeDescription = selectedAttribute?.Description;
+            props.AttributeNullable = !selectedAttribute?.Nullable;
+            props.AttributeDomainName = selectedAttribute?.DomainName;
+            props.AttributeDataType = selectedAttribute?.DataType;
 
             propertyGrid1.SelectedObject = props;
         }
@@ -184,6 +189,15 @@ namespace WinFormsApp1
                             listBox1.SetSelected(idx, true);
                         }
                         break;
+                    case "EntityDescription":
+                        if (selectedEntity != null)
+                        {
+                            selectedEntity.Description = item.Value?.ToString() ?? string.Empty;
+                            int idx = listBox1.SelectedIndex;
+                            UpdateEntities();
+                            listBox1.SetSelected(idx, true);
+                        }
+                        break;
                     case "AttributeLogicalName":
                         if (selectedAttribute != null)
                         {
@@ -197,6 +211,42 @@ namespace WinFormsApp1
                         if (selectedAttribute != null)
                         {
                             selectedAttribute.PhysicalName = item.Value?.ToString() ?? string.Empty;
+                            int idx = listBox2.SelectedIndex;
+                            UpdateAttributes();
+                            listBox2.SetSelected(idx, true);
+                        }
+                        break;
+                    case "AttributeDescription":
+                        if (selectedAttribute != null)
+                        {
+                            selectedAttribute.Description = item.Value?.ToString() ?? string.Empty;
+                            int idx = listBox2.SelectedIndex;
+                            UpdateAttributes();
+                            listBox2.SetSelected(idx, true);
+                        }
+                        break;
+                    case "AttributeNullable":
+                        if (selectedAttribute != null)
+                        {
+                            selectedAttribute.Nullable = item.Value?.Equals(true);
+                            int idx = listBox2.SelectedIndex;
+                            UpdateAttributes();
+                            listBox2.SetSelected(idx, true);
+                        }
+                        break;
+                    case "AttributeDomainName":
+                        if (selectedAttribute != null)
+                        {
+                            selectedAttribute.DomainName = item.Value?.ToString() ?? string.Empty;
+                            int idx = listBox2.SelectedIndex;
+                            UpdateAttributes();
+                            listBox2.SetSelected(idx, true);
+                        }
+                        break;
+                    case "AttributeDataType":
+                        if (selectedAttribute != null)
+                        {
+                            selectedAttribute.DataType = item.Value?.ToString() ?? string.Empty;
                             int idx = listBox2.SelectedIndex;
                             UpdateAttributes();
                             listBox2.SetSelected(idx, true);

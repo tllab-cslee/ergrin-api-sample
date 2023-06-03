@@ -77,7 +77,7 @@
             button1.Location = new Point(745, 6);
             button1.Margin = new Padding(4);
             button1.Name = "button1";
-            button1.Size = new Size(63, 31);
+            button1.Size = new Size(80, 31);
             button1.TabIndex = 4;
             button1.Text = "...";
             button1.UseVisualStyleBackColor = true;
@@ -127,6 +127,7 @@
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "ERgrin Files(*.ergrin)|*.ergrin";
             // 
             // propertyGrid1
             // 
@@ -139,9 +140,9 @@
             // 
             // button2
             // 
-            button2.Location = new Point(827, 6);
+            button2.Location = new Point(855, 6);
             button2.Name = "button2";
-            button2.Size = new Size(108, 31);
+            button2.Size = new Size(80, 31);
             button2.TabIndex = 10;
             button2.Text = "저장";
             button2.UseVisualStyleBackColor = true;
@@ -157,10 +158,16 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // saveFileDialog1
+            // 
+            saveFileDialog1.DefaultExt = "ergrin";
+            saveFileDialog1.Filter = "ERgrin Files(*.ergrin)|*.ergrin";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(1131, 600);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -174,6 +181,7 @@
             Controls.Add(label1);
             Controls.Add(listBox1);
             Margin = new Padding(4);
+            MaximizeBox = false;
             Name = "Form1";
             Text = "ERgrinApiSample";
             ResumeLayout(false);
