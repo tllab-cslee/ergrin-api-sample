@@ -10,15 +10,16 @@ namespace ERgrinApiSample
 
         public bool LoadFile(string filepath)
         {
+            Models = null;
+            Entities = null;
+            Attributes = null;
+
             project = Project.Create(filepath);
             
             if (project == null)
                 return false;
 
             Models = project.Models;
-
-            Entities = null;
-            Attributes = null;
 
             return true;
         }
