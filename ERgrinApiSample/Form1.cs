@@ -1,8 +1,5 @@
 using ERgrin.Api;
-using System;
 using System.Data;
-using System.Security;
-using System.Windows.Forms;
 
 namespace WinFormsApp1
 {
@@ -18,9 +15,15 @@ namespace WinFormsApp1
             Reset();
 
             project = Project.Create(filepath);
+
             if (project.Models is not null)
             {
-                SetEntities(project.Models.FirstOrDefault()!);
+                comboBox1.Items.Clear();
+                foreach (var model in project.Models)
+                {
+                    comboBox1.Items.Add(model.LogicalName);
+                }
+                comboBox1.SelectedIndex = 0;
             }
         }
 
@@ -28,6 +31,8 @@ namespace WinFormsApp1
         {
             selectedEntity = null;
             selectedAttribute = null;
+            selectedModel = null;
+            selectedDiagram = null;
             entities = null;
             attributes = null;
 
@@ -67,6 +72,11 @@ namespace WinFormsApp1
             entities = model.Entities!;
         }
 
+        private void SetEntities(Model model, string diagramName)
+        {
+            entities = model.GetEntities(diagramName);
+        }
+
         private Entity? FindEntity(string name)
         {
             return entities?.Where(x => x.LogicalName == name).FirstOrDefault();
@@ -89,7 +99,6 @@ namespace WinFormsApp1
                 textBox1.Text = openFileDialog1.FileName;
 
                 LoadFile(textBox1.Text);
-                UpdateEntities();
             }
         }
 
@@ -108,6 +117,41 @@ namespace WinFormsApp1
             {
                 string filePath = saveFileDialog1.FileName;
                 project?.Apply(filePath);
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (project?.Models == null)
+                return;
+
+            var model = project.Models.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
+            if (model != null && model.ID != selectedModel?.ID)
+            {
+                selectedModel = model;
+                if (model!.Diagrams != null)
+                {
+                    comboBox2.Items.Clear();
+                    foreach (var diagram in model.Diagrams)
+                    {
+                        comboBox2.Items.Add(diagram.Name);
+                    }
+                    comboBox2.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (selectedModel?.Diagrams == null)
+                return;
+
+            var diagram = selectedModel.Diagrams.Where(x => comboBox2.SelectedItem.Equals(x.Name)).First();
+            if (diagram != null && diagram.ID != selectedDiagram?.ID)
+            {
+                selectedDiagram = diagram;
+                SetEntities(selectedModel, diagram.Name!);
+                UpdateEntities();
             }
         }
 
@@ -257,6 +301,10 @@ namespace WinFormsApp1
         }
 
         private Project? project;
+
+        private Model? selectedModel;
+        private Diagram? selectedDiagram;
+
         private List<Entity>? entities;
         private List<ERgrin.Api.Attribute>? attributes;
 

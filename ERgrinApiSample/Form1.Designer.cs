@@ -41,13 +41,17 @@
             button2 = new Button();
             button3 = new Button();
             saveFileDialog1 = new SaveFileDialog();
+            label5 = new Label();
+            comboBox1 = new ComboBox();
+            label6 = new Label();
+            comboBox2 = new ComboBox();
             SuspendLayout();
             // 
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
             listBox1.ItemHeight = 20;
-            listBox1.Location = new Point(15, 77);
+            listBox1.Location = new Point(15, 124);
             listBox1.Margin = new Padding(4);
             listBox1.Name = "listBox1";
             listBox1.Size = new Size(397, 204);
@@ -86,7 +90,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(17, 53);
+            label2.Location = new Point(17, 100);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(102, 20);
@@ -96,7 +100,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 295);
+            label3.Location = new Point(15, 342);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(202, 20);
@@ -107,7 +111,7 @@
             // 
             listBox2.FormattingEnabled = true;
             listBox2.ItemHeight = 20;
-            listBox2.Location = new Point(15, 319);
+            listBox2.Location = new Point(15, 366);
             listBox2.Margin = new Padding(4);
             listBox2.Name = "listBox2";
             listBox2.Size = new Size(397, 264);
@@ -117,7 +121,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(422, 53);
+            label4.Location = new Point(422, 100);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(106, 20);
@@ -131,7 +135,7 @@
             // 
             // propertyGrid1
             // 
-            propertyGrid1.Location = new Point(424, 77);
+            propertyGrid1.Location = new Point(424, 124);
             propertyGrid1.Margin = new Padding(4);
             propertyGrid1.Name = "propertyGrid1";
             propertyGrid1.Size = new Size(694, 507);
@@ -163,12 +167,54 @@
             saveFileDialog1.DefaultExt = "ergrin";
             saveFileDialog1.Filter = "ERgrin Files(*.ergrin)|*.ergrin";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(15, 55);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(39, 20);
+            label5.TabIndex = 12;
+            label5.Text = "모델";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(61, 52);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(351, 28);
+            comboBox1.TabIndex = 13;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(476, 55);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(69, 20);
+            label6.TabIndex = 14;
+            label6.Text = "주제영역";
+            // 
+            // comboBox2
+            // 
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(552, 52);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(564, 28);
+            comboBox2.TabIndex = 15;
+            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(1131, 600);
+            ClientSize = new Size(1131, 643);
+            Controls.Add(comboBox2);
+            Controls.Add(label6);
+            Controls.Add(comboBox1);
+            Controls.Add(label5);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(propertyGrid1);
@@ -202,5 +248,9 @@
         private PropertyGrid propertyGrid1;
         private Button button3;
         private SaveFileDialog saveFileDialog1;
+        private Label label5;
+        private ComboBox comboBox1;
+        private Label label6;
+        private ComboBox comboBox2;
     }
 }

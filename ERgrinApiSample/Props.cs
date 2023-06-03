@@ -29,7 +29,7 @@ namespace WinFormsApp1
         [Category("Entity Attribute"), Description("엔티티 속성의 Null 허용 여부"), DisplayName("Nullable")]
         public bool? AttributeNullable { get; set; } = default;
 
-        [Category("Entity Attribute"), Description("엔티티 속성의 도메인"), DisplayName("Domain Name")]
+        [Category("Entity Attribute"), Description("엔티티 속성의 도메인 이름"), DisplayName("Domain Name")]
         public string? AttributeDomainName { get; set; } = default;
 
         [Category("Entity Attribute"), Description("엔티티 속성의 데이터 타입"), DisplayName("Data Type")]
