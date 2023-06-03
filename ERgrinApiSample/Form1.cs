@@ -22,10 +22,10 @@ namespace ERgrinApiSample
 
                 Reset();
 
-                if (myProject.LoadFile(textBox1.Text))
-                {
-                    UpdateModels(myProject.Models);
-                }
+                if (!myProject.LoadFile(textBox1.Text))
+                    return;
+
+                UpdateModels(myProject.Models);
             }
         }
 
