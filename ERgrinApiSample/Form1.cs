@@ -93,6 +93,24 @@ namespace WinFormsApp1
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var res = MessageBox.Show("변경된 값을 기존 파일에 저장하시겠습니까?", "저장", MessageBoxButtons.OKCancel);
+            if (res == DialogResult.OK)
+            {
+                project?.Apply();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = saveFileDialog1.FileName;
+                project?.Apply(filePath);
+            }
+        }
+
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var obj = (ListBox)sender;
@@ -185,8 +203,6 @@ namespace WinFormsApp1
                         }
                         break;
                 }
-
-                project?.Apply();
             }
         }
 
