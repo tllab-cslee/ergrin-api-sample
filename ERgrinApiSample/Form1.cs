@@ -63,11 +63,12 @@ namespace ERgrinApiSample
             if (diagram != null && diagram.ID != selectedDiagram?.ID)
             {
                 selectedDiagram = diagram;
-                myProject.SetEntities(selectedModel, diagram.Name);
+                myProject.SetEntities(selectedModel, diagram.Name!);
                 UpdateEntities(myProject.Entities);
 
                 selectedEntity = null;
-                listBox2.Items.Clear();
+                myProject.SetAttribute(null);
+                UpdateAttributes(myProject.Attributes);
 
                 selectedAttribute = null;
                 SetProps();
@@ -207,20 +208,21 @@ namespace ERgrinApiSample
             selectedEntity = null;
             selectedAttribute = null;
 
-            comboBox1.Items.Clear();
-            comboBox2.Items.Clear();
-            listBox1.Items.Clear();
-            listBox2.Items.Clear();
+            UpdateModels(null);
+            UpdateDiagrams(null);
+            UpdateEntities(null);
+            UpdateAttributes(null);
 
             SetProps();
         }
 
         private void UpdateModels(List<Model>? models)
         {
+            comboBox1.Items.Clear();
+
             if (models == null)
                 return;
 
-            comboBox1.Items.Clear();
             foreach (var model in models)
             {
                 comboBox1.Items.Add(model.LogicalName);
@@ -230,10 +232,11 @@ namespace ERgrinApiSample
 
         private void UpdateDiagrams(List<Diagram>? diagrams)
         {
+            comboBox2.Items.Clear();
+
             if (diagrams == null)
                 return;
 
-            comboBox2.Items.Clear();
             foreach (var diagram in diagrams)
             {
                 comboBox2.Items.Add(diagram.Name);
@@ -243,10 +246,11 @@ namespace ERgrinApiSample
 
         private void UpdateEntities(List<Entity>? entities)
         {
+            listBox1.Items.Clear();
+
             if (entities == null)
                 return;
 
-            listBox1.Items.Clear();
             foreach (var entity in entities)
             {
                 listBox1.Items.Add(entity.LogicalName!);
@@ -255,10 +259,11 @@ namespace ERgrinApiSample
 
         private void UpdateAttributes(List<ERgrin.Api.Attribute>? attributes)
         {
+            listBox2.Items.Clear();
+
             if (attributes == null)
                 return;
 
-            listBox2.Items.Clear();
             foreach (var attribute in attributes)
             {
                 listBox2.Items.Add(attribute.LogicalName!);

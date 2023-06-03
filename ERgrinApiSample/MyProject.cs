@@ -4,7 +4,7 @@ namespace ERgrinApiSample
 {
     internal class MyProject
     {
-        public List<Model>? Models => project?.Models;
+        public List<Model>? Models { get; set; }
         public List<Entity>? Entities { get; set; }
         public List<ERgrin.Api.Attribute>? Attributes { get; set; }
 
@@ -15,8 +15,7 @@ namespace ERgrinApiSample
             if (project == null)
                 return false;
 
-            if (project.Models == null)
-                return false;
+            Models = project.Models;
 
             Entities = null;
             Attributes = null;
@@ -29,33 +28,24 @@ namespace ERgrinApiSample
             project?.Apply(filePath);
         }
 
-        public void SetEntities(Model? model, string? diagramName)
+        public void SetEntities(Model? model, string diagramName)
         {
-            if (model == null)
-                return;
-
-            if (diagramName == null)
-                return;
-
-            Entities = model.GetEntities(diagramName);
+            Entities = model?.GetEntities(diagramName);
         }
 
         public void SetAttribute(Entity? entity)
         {
-            if (entity == null)
-                return;
-
-            Attributes = entity.Attributes;
+            Attributes = entity?.Attributes;
         }
 
         public Model? FindModel(string name)
         {
-            return Models?.Where(x => name.Equals(x.LogicalName)).First();
+            return Models?.Where(x => name.Equals(x.LogicalName)).FirstOrDefault();
         }
 
         public Diagram? FindDiagram(Model? model, string name)
         {
-            return model?.Diagrams?.Where(x => name.Equals(x.Name)).First();
+            return model?.Diagrams?.Where(x => name.Equals(x.Name)).FirstOrDefault();
         }
 
         public Entity? FindEntity(string name)
