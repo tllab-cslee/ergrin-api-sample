@@ -10,94 +10,15 @@ namespace WinFormsApp1
             InitializeComponent();
         }
 
-        private void LoadFile(string filepath)
-        {
-            Reset();
-
-            project = Project.Create(filepath);
-
-            if (project.Models is not null)
-            {
-                comboBox1.Items.Clear();
-                foreach (var model in project.Models)
-                {
-                    comboBox1.Items.Add(model.LogicalName);
-                }
-                comboBox1.SelectedIndex = 0;
-            }
-        }
-
-        private void Reset()
-        {
-            selectedEntity = null;
-            selectedAttribute = null;
-            selectedModel = null;
-            selectedDiagram = null;
-            entities = null;
-            attributes = null;
-
-            SetProps();
-            UpdateAttributes();
-            UpdateEntities();
-        }
-
-        private void UpdateEntities()
-        {
-            listBox1.Items.Clear();
-
-            if (entities != null)
-            {
-                foreach (var entity in entities)
-                {
-                    listBox1.Items.Add(entity.LogicalName!);
-                }
-            }
-        }
-
-        private void UpdateAttributes()
-        {
-            listBox2.Items.Clear();
-
-            if (attributes != null)
-            {
-                foreach (var attribute in attributes)
-                {
-                    listBox2.Items.Add(attribute.LogicalName!);
-                }
-            }
-        }
-
-        private void SetEntities(Model model)
-        {
-            entities = model.Entities!;
-        }
-
-        private void SetEntities(Model model, string diagramName)
-        {
-            entities = model.GetEntities(diagramName);
-        }
-
-        private Entity? FindEntity(string name)
-        {
-            return entities?.Where(x => x.LogicalName == name).FirstOrDefault();
-        }
-
-        private void SetAttribute(Entity entity)
-        {
-            attributes = entity.Attributes!;
-        }
-
-        private ERgrin.Api.Attribute? FindAttribute(string name)
-        {
-            return attributes?.Where(x => x.LogicalName == name).FirstOrDefault();
-        }
+        //--------------------------------------------------------------------------------
+        // Control Event Handlers
+        //--------------------------------------------------------------------------------
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = openFileDialog1.FileName;
-
                 LoadFile(textBox1.Text);
             }
         }
@@ -122,14 +43,11 @@ namespace WinFormsApp1
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (project?.Models == null)
-                return;
-
-            var model = project.Models.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
+            var model = project?.Models?.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
             if (model != null && model.ID != selectedModel?.ID)
             {
                 selectedModel = model;
-                if (model!.Diagrams != null)
+                if (model.Diagrams != null)
                 {
                     comboBox2.Items.Clear();
                     foreach (var diagram in model.Diagrams)
@@ -143,14 +61,11 @@ namespace WinFormsApp1
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (selectedModel?.Diagrams == null)
-                return;
-
-            var diagram = selectedModel.Diagrams.Where(x => comboBox2.SelectedItem.Equals(x.Name)).First();
+            var diagram = selectedModel?.Diagrams?.Where(x => comboBox2.SelectedItem.Equals(x.Name)).First();
             if (diagram != null && diagram.ID != selectedDiagram?.ID)
             {
                 selectedDiagram = diagram;
-                SetEntities(selectedModel, diagram.Name!);
+                SetEntities(selectedModel!, diagram.Name!);
                 UpdateEntities();
             }
         }
@@ -162,12 +77,10 @@ namespace WinFormsApp1
             if (entity != null)
             {
                 selectedEntity = entity;
-
                 SetAttribute(entity);
                 UpdateAttributes();
 
                 selectedAttribute = null;
-
                 SetProps();
             }
         }
@@ -180,29 +93,8 @@ namespace WinFormsApp1
             if (attribute != null)
             {
                 selectedAttribute = attribute;
-
                 SetProps();
             }
-        }
-
-        private void SetProps()
-        {
-            var props = new Props();
-
-            props.EntityID = selectedEntity?.ID!.ToUpper();
-            props.EntityLogicalName = selectedEntity?.LogicalName;
-            props.EntityPhysicalName = selectedEntity?.PhysicalName;
-            props.EntityDescription = selectedEntity?.Description;
-
-            props.AttributeID = selectedAttribute?.ID!.ToUpper();
-            props.AttributeLogicalName = selectedAttribute?.LogicalName;
-            props.AttributePhysicalName = selectedAttribute?.PhysicalName;
-            props.AttributeDescription = selectedAttribute?.Description;
-            props.AttributeNullable = selectedAttribute?.Nullable;
-            props.AttributeDomainName = selectedAttribute?.DomainName;
-            props.AttributeDataType = selectedAttribute?.DataType;
-
-            propertyGrid1.SelectedObject = props;
         }
 
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -299,6 +191,111 @@ namespace WinFormsApp1
                 }
             }
         }
+
+        //--------------------------------------------------------------------------------
+        // Private Methods
+        //--------------------------------------------------------------------------------
+
+        private void LoadFile(string filepath)
+        {
+            Reset();
+
+            project = Project.Create(filepath);
+
+            if (project.Models != null)
+            {
+                comboBox1.Items.Clear();
+                foreach (var model in project.Models)
+                {
+                    comboBox1.Items.Add(model.LogicalName);
+                }
+                comboBox1.SelectedIndex = 0;
+            }
+        }
+
+        private void Reset()
+        {
+            selectedEntity = null;
+            selectedAttribute = null;
+            selectedModel = null;
+            selectedDiagram = null;
+            entities = null;
+            attributes = null;
+
+            SetProps();
+            UpdateAttributes();
+            UpdateEntities();
+        }
+
+        private void UpdateEntities()
+        {
+            listBox1.Items.Clear();
+
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    listBox1.Items.Add(entity.LogicalName!);
+                }
+            }
+        }
+
+        private void UpdateAttributes()
+        {
+            listBox2.Items.Clear();
+
+            if (attributes != null)
+            {
+                foreach (var attribute in attributes)
+                {
+                    listBox2.Items.Add(attribute.LogicalName!);
+                }
+            }
+        }
+
+        private void SetEntities(Model model, string diagramName)
+        {
+            entities = model.GetEntities(diagramName);
+        }
+
+        private Entity? FindEntity(string name)
+        {
+            return entities?.Where(x => x.LogicalName == name).FirstOrDefault();
+        }
+
+        private void SetAttribute(Entity entity)
+        {
+            attributes = entity.Attributes!;
+        }
+
+        private ERgrin.Api.Attribute? FindAttribute(string name)
+        {
+            return attributes?.Where(x => x.LogicalName == name).FirstOrDefault();
+        }
+
+        private void SetProps()
+        {
+            var props = new Props();
+
+            props.EntityID = selectedEntity?.ID!.ToUpper();
+            props.EntityLogicalName = selectedEntity?.LogicalName;
+            props.EntityPhysicalName = selectedEntity?.PhysicalName;
+            props.EntityDescription = selectedEntity?.Description;
+
+            props.AttributeID = selectedAttribute?.ID!.ToUpper();
+            props.AttributeLogicalName = selectedAttribute?.LogicalName;
+            props.AttributePhysicalName = selectedAttribute?.PhysicalName;
+            props.AttributeDescription = selectedAttribute?.Description;
+            props.AttributeNullable = selectedAttribute?.Nullable;
+            props.AttributeDomainName = selectedAttribute?.DomainName;
+            props.AttributeDataType = selectedAttribute?.DataType;
+
+            propertyGrid1.SelectedObject = props;
+        }
+
+        //--------------------------------------------------------------------------------
+        // Private Fields
+        //--------------------------------------------------------------------------------
 
         private Project? project;
 
