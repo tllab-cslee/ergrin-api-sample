@@ -154,7 +154,7 @@ namespace WinFormsApp1
             props.AttributeLogicalName = selectedAttribute?.LogicalName;
             props.AttributePhysicalName = selectedAttribute?.PhysicalName;
             props.AttributeDescription = selectedAttribute?.Description;
-            props.AttributeNullable = !selectedAttribute?.Nullable;
+            props.AttributeNullable = selectedAttribute?.Nullable;
             props.AttributeDomainName = selectedAttribute?.DomainName;
             props.AttributeDataType = selectedAttribute?.DataType;
 
