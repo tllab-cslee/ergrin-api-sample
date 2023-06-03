@@ -49,7 +49,7 @@ namespace ERgrinApiSample
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var model = myProject.Models?.Where(x => comboBox1.SelectedItem.Equals(x.LogicalName)).First();
+            var model = myProject.FindModel((string)comboBox1.SelectedItem);
             if (model != null && model.ID != selectedModel?.ID)
             {
                 selectedModel = model;
@@ -59,12 +59,18 @@ namespace ERgrinApiSample
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var diagram = selectedModel?.Diagrams?.Where(x => comboBox2.SelectedItem.Equals(x.Name)).First();
+            var diagram = myProject.FindDiagram(selectedModel, (string)comboBox2.SelectedItem);
             if (diagram != null && diagram.ID != selectedDiagram?.ID)
             {
                 selectedDiagram = diagram;
                 myProject.SetEntities(selectedModel, diagram.Name);
                 UpdateEntities(myProject.Entities);
+
+                selectedEntity = null;
+                listBox2.Items.Clear();
+
+                selectedAttribute = null;
+                SetProps();
             }
         }
 

@@ -48,6 +48,16 @@ namespace ERgrinApiSample
             Attributes = entity.Attributes;
         }
 
+        public Model? FindModel(string name)
+        {
+            return Models?.Where(x => name.Equals(x.LogicalName)).First();
+        }
+
+        public Diagram? FindDiagram(Model? model, string name)
+        {
+            return model?.Diagrams?.Where(x => name.Equals(x.Name)).First();
+        }
+
         public Entity? FindEntity(string name)
         {
             return Entities?.Where(x => x.LogicalName == name).FirstOrDefault();
