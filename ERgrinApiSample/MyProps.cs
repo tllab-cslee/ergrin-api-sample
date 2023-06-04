@@ -15,7 +15,7 @@ namespace ERgrinApiSample
         {
             List<string>? list = null;
          
-            if (context?.Instance is ERgrinApiSample.Props props)
+            if (context?.Instance is ERgrinApiSample.MyProps props)
             {
                 list = props.GetDomains();
             }
@@ -25,11 +25,11 @@ namespace ERgrinApiSample
         }
     }
 
-    internal class Props
+    internal class MyProps
     {
         private MyProject project;
 
-        public Props(MyProject myProject)
+        public MyProps(MyProject myProject)
         {
             project = myProject;
         }

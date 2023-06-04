@@ -1,11 +1,10 @@
 using ERgrin.Api;
-using System.Data;
 
 namespace ERgrinApiSample
 {
-    public partial class Form1 : Form
+    public partial class MyForm : Form
     {
-        public Form1()
+        public MyForm()
         {
             InitializeComponent();
         }

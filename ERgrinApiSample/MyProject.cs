@@ -65,9 +65,9 @@ namespace ERgrinApiSample
             return Attributes?.Where(x => x.LogicalName == name).FirstOrDefault();
         }
 
-        public Props GetProps(Entity? entity, ERgrin.Api.Attribute? attribute)
+        public MyProps GetProps(Entity? entity, ERgrin.Api.Attribute? attribute)
         {
-            var props = new Props(this);
+            var props = new MyProps(this);
 
             props.EntityID = entity?.ID!.ToUpper();
             props.EntityLogicalName = entity?.LogicalName;
