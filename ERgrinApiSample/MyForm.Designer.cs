@@ -83,7 +83,7 @@
             button1.Name = "button1";
             button1.Size = new Size(80, 31);
             button1.TabIndex = 3;
-            button1.Text = "...";
+            button1.Text = "열기...";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -205,7 +205,7 @@
             comboBox2.TabIndex = 7;
             comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
             // 
-            // Form1
+            // MyForm
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -228,7 +228,7 @@
             Controls.Add(listBox1);
             Margin = new Padding(4);
             MaximizeBox = false;
-            Name = "Form1";
+            Name = "MyForm";
             Text = "ERgrinApiSample";
             ResumeLayout(false);
             PerformLayout();
