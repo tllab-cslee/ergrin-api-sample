@@ -25,8 +25,7 @@ namespace ERgrinApiSample
 
                 Reset();
 
-                if (!myProject.LoadFile(textBox1.Text))
-                    return;
+                myProject.LoadFile(textBox1.Text);
 
                 UpdateModels(myProject.Models);
             }
@@ -174,7 +173,7 @@ namespace ERgrinApiSample
                     case "AttributeNullable":
                         if (selectedAttribute != null)
                         {
-                            selectedAttribute.Nullable = item.Value?.Equals(true);
+                            selectedAttribute.Nullable = item.Value?.Equals(true) ?? true;
                             int idx = listBox2.SelectedIndex;
                             UpdateAttributes(myProject.Attributes);
                             listBox2.SetSelected(idx, true);

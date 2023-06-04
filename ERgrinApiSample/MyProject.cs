@@ -17,20 +17,16 @@ namespace ERgrinApiSample
         // Public Methods
         //--------------------------------------------------------------------------------
 
-        public bool LoadFile(string filepath)
+        public void LoadFile(string filepath)
         {
             Models = null;
             Entities = null;
             Attributes = null;
 
-            project = Project.Create(filepath);
-            
-            if (project == null)
-                return false;
+            project = new Project();
+            project.Load(filepath);
 
             Models = project.Models;
-
-            return true;
         }
 
         public void SaveFile(string filePath = default!)
