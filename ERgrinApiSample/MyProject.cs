@@ -4,10 +4,18 @@ namespace ERgrinApiSample
 {
     internal class MyProject
     {
+        //--------------------------------------------------------------------------------
+        // Properties
+        //--------------------------------------------------------------------------------
+
         public List<Model>? Models { get; set; }
         public List<Entity>? Entities { get; set; }
         public List<ERgrin.Api.Attribute>? Attributes { get; set; }
         public List<Domain>? Domains { get; set; }
+
+        //--------------------------------------------------------------------------------
+        // Public Methods
+        //--------------------------------------------------------------------------------
 
         public bool LoadFile(string filepath)
         {
@@ -84,6 +92,10 @@ namespace ERgrinApiSample
 
             return props;
         }
+
+        //--------------------------------------------------------------------------------
+        // Private Fields
+        //--------------------------------------------------------------------------------
 
         private Project? project;
     }

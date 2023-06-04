@@ -4,6 +4,10 @@ namespace ERgrinApiSample
 {
     public partial class MyForm : Form
     {
+        //--------------------------------------------------------------------------------
+        // Initializer
+        //--------------------------------------------------------------------------------
+
         public MyForm()
         {
             InitializeComponent();

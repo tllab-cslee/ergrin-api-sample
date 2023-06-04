@@ -2,40 +2,11 @@
 
 namespace ERgrinApiSample
 {
-    internal class DomainNameConverter : TypeConverter
-    {
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
-        {
-            return true;
-        }
-
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
-        {
-            List<string>? list = null;
-         
-            if (context?.Instance is ERgrinApiSample.MyProps props)
-            {
-                list = props.GetDomains();
-            }
-
-            StandardValuesCollection cols = new StandardValuesCollection(list);
-            return cols;
-        }
-    }
-
     internal class MyProps
     {
-        private MyProject project;
-
-        public MyProps(MyProject myProject)
-        {
-            project = myProject;
-        }
-
-        public List<string>? GetDomains()
-        {
-            return project.Domains?.Select(x => x.Name!).ToList();
-        }
+        //--------------------------------------------------------------------------------
+        // Properties
+        //--------------------------------------------------------------------------------
 
         [Category("Entity"), Description("엔티티의 UUID"), DisplayName("\t\tUUID"), ReadOnly(true)]
         public string? EntityID { get; set; } = default;
@@ -70,5 +41,46 @@ namespace ERgrinApiSample
 
         [Category("Entity Attribute"), Description("엔티티 속성의 설명"), DisplayName("\tDescription")]
         public string? AttributeDescription { get; set; } = default;
+
+        //--------------------------------------------------------------------------------
+        // Initializer / Public Methods
+        //--------------------------------------------------------------------------------
+
+        public MyProps(MyProject myProject)
+        {
+            project = myProject;
+        }
+
+        public List<string>? GetDomains()
+        {
+            return project.Domains?.Select(x => x.Name!).ToList();
+        }
+
+        //--------------------------------------------------------------------------------
+        // Private Fields
+        //--------------------------------------------------------------------------------
+
+        private MyProject project;
+    }
+
+    internal class DomainNameConverter : TypeConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
+        {
+            return true;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+        {
+            List<string>? list = null;
+
+            if (context?.Instance is ERgrinApiSample.MyProps props)
+            {
+                list = props.GetDomains();
+            }
+
+            StandardValuesCollection cols = new StandardValuesCollection(list);
+            return cols;
+        }
     }
 }
