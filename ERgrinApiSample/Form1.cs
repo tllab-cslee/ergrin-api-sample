@@ -66,6 +66,8 @@ namespace ERgrinApiSample
                 myProject.SetEntities(selectedModel, diagram.Name!);
                 UpdateEntities(myProject.Entities);
 
+                myProject.SetDomains(selectedModel);
+
                 selectedEntity = null;
                 myProject.SetAttribute(null);
                 UpdateAttributes(myProject.Attributes);

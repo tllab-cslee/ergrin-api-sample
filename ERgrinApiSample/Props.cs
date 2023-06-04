@@ -1,10 +1,44 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ERgrinApiSample
 {
+    internal class DomainNameConverter : TypeConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
+        {
+            return true;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+        {
+            List<string>? list = null;
+         
+            if (context?.Instance is ERgrinApiSample.Props props)
+            {
+                list = props.GetDomains();
+            }
+
+            StandardValuesCollection cols = new StandardValuesCollection(list);
+            return cols;
+        }
+    }
+
     internal class Props
     {
+        private MyProject project;
+
+        public Props(MyProject myProject)
+        {
+            project = myProject;
+        }
+
+        public List<string>? GetDomains()
+        {
+            return project.Domains?.Select(x => x.Name!).ToList();
+        }
+
         [Category("Entity"), Description("엔티티의 UUID"), DisplayName("\t\tUUID"), ReadOnly(true)]
         public string? EntityID { get; set; } = default;
 
@@ -29,6 +63,7 @@ namespace ERgrinApiSample
         [Category("Entity Attribute"), Description("엔티티 속성의 Null 허용 여부"), DisplayName("Nullable")]
         public bool? AttributeNullable { get; set; } = default;
 
+        [TypeConverter(typeof(DomainNameConverter))]
         [Category("Entity Attribute"), Description("엔티티 속성의 도메인 이름"), DisplayName("Domain Name")]
         public string? AttributeDomainName { get; set; } = default;
 

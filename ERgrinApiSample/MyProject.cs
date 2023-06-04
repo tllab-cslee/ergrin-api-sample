@@ -7,6 +7,7 @@ namespace ERgrinApiSample
         public List<Model>? Models { get; set; }
         public List<Entity>? Entities { get; set; }
         public List<ERgrin.Api.Attribute>? Attributes { get; set; }
+        public List<Domain>? Domains { get; set; }
 
         public bool LoadFile(string filepath)
         {
@@ -32,6 +33,11 @@ namespace ERgrinApiSample
         public void SetEntities(Model? model, string diagramName)
         {
             Entities = model?.GetEntities(diagramName);
+        }
+
+        public void SetDomains(Model? model)
+        {
+            Domains = model?.Domains;
         }
 
         public void SetAttribute(Entity? entity)
@@ -61,7 +67,7 @@ namespace ERgrinApiSample
 
         public Props GetProps(Entity? entity, ERgrin.Api.Attribute? attribute)
         {
-            var props = new Props();
+            var props = new Props(this);
 
             props.EntityID = entity?.ID!.ToUpper();
             props.EntityLogicalName = entity?.LogicalName;
