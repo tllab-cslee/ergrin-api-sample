@@ -32,6 +32,12 @@ namespace ERgrinApiSample
         [Category("Entity Attribute"), Description("엔티티 속성의 Null 허용 여부"), DisplayName("Nullable")]
         public bool? AttributeNullable { get; set; } = default;
 
+        [Category("Entity Attribute"), Description("엔티티 속성의 PK 여부"), DisplayName("IsKey")]
+        public bool? AttributeIsKey { get; set; } = default;
+
+        [Category("Entity Attribute"), Description("엔티티 속성의 FK 여부"), DisplayName("IsForeignKey"), ReadOnly(true)]
+        public bool? AttributeIsForeignKey { get; set; } = default;
+
         [TypeConverter(typeof(DomainNameConverter))]
         [Category("Entity Attribute"), Description("엔티티 속성의 도메인 이름"), DisplayName("Domain Name")]
         public string? AttributeDomainName { get; set; } = default;

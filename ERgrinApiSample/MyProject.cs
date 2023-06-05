@@ -73,16 +73,20 @@ namespace ERgrinApiSample
         {
             var props = new MyProps(this);
 
+            // Entity Properties
             props.EntityID = entity?.ID!.ToUpper();
             props.EntityLogicalName = entity?.LogicalName;
             props.EntityPhysicalName = entity?.PhysicalName;
             props.EntityDescription = entity?.Description;
 
+            // Entity Attribute Properties
             props.AttributeID = attribute?.ID!.ToUpper();
             props.AttributeLogicalName = attribute?.LogicalName;
             props.AttributePhysicalName = attribute?.PhysicalName;
             props.AttributeDescription = attribute?.Description;
             props.AttributeNullable = attribute?.Nullable;
+            props.AttributeIsKey = attribute?.IsKey;
+            props.AttributeIsForeignKey = attribute?.IsForeignKey;
             props.AttributeDomainName = attribute?.DomainName;
             props.AttributeDataType = attribute?.DataType;
 
